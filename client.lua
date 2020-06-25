@@ -1,12 +1,10 @@
-local radiousDisPlayerNames = 5
 local enableids = true
-local useBg = false
 local playerDistances = {}
 
 
 Citizen.CreateThread(function()
     while true do 
-        if IsControlJustPressed(0, 0x3C3DD371) then
+        if IsControlJustPressed(0, Config.ToggleKey) then
             enableids = not enableids
             Wait(50)
         end
@@ -43,7 +41,7 @@ Citizen.CreateThread(function()
 
             for _,v in pairs(players) do
                 local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(v)))
-				if (playerDistances[v] < radiousDisPlayerNames) then
+				if (playerDistances[v] < Config.radiousDisPlayerNames) then
 					if GetPlayerPed(v) ~=  ped then
 						DrawText3D(x, y, z+1, tostring(GetPlayerServerId(v)))
 					end
@@ -76,7 +74,7 @@ function DrawText3D(x, y, z, text)
     SetTextCentre(1)
     DisplayText(str,_x,_y)
     local factor = (string.len(text)) / 150
-	if useBg then
+	if Config.useBg then
 		DrawSprite("generic_textures", "hud_menu_4a", _x, _y+0.0125,0.015+ factor, 0.03, 0.1, 100, 1, 1, 190, 0)
 	end
 end
