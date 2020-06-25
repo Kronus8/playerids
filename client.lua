@@ -1,4 +1,36 @@
+local radiousDisPlayerNames = 5
 local enableids = true
+local useBg = false
+local playerDistances = {}
+
+
+Citizen.CreateThread(function()
+    while true do 
+        if IsControlJustPressed(0, 0x3C3DD371) then
+            enableids = not enableids
+            Wait(50)
+        end
+        Wait(0)
+    end
+end)
+
+Citizen.CreateThread(function()
+    while true do
+		local players = GetPlayers()
+		
+		for _,v in pairs(players) do
+		
+			if enableids then
+				local ped = PlayerPedId()
+				x1, y1, z1 = table.unpack(GetEntityCoords(ped, true))
+				x2, y2, z2 = table.unpack(GetEntityCoords(GetPlayerPed(v), true))
+				distance = math.floor(Vdist(x1,  y1,  z1,  x2,  y2,  z2))
+				playerDistances[v] = distance
+			end
+		end
+		Citizen.Wait(1000)
+    end
+end)
 
 -- ID's thread.
 Citizen.CreateThread(function()
@@ -11,9 +43,11 @@ Citizen.CreateThread(function()
 
             for _,v in pairs(players) do
                 local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(v)))
-                if GetPlayerPed(v) ~= GetPlayerPed(-1) then
-                    DrawText3D(x, y, z, tostring(GetPlayerServerId(v)))
-                end
+				if (playerDistances[v] < radiousDisPlayerNames) then
+					if GetPlayerPed(v) ~=  ped then
+						DrawText3D(x, y, z+1, tostring(GetPlayerServerId(v)))
+					end
+				end
             end
         end
     end
@@ -21,7 +55,7 @@ end)
 
 function GetPlayers()
     local players = {}
-
+	
     for i = 0, 31 do
         if NetworkIsPlayerActive(i) then
             table.insert(players, i)
@@ -42,5 +76,7 @@ function DrawText3D(x, y, z, text)
     SetTextCentre(1)
     DisplayText(str,_x,_y)
     local factor = (string.len(text)) / 150
-    DrawSprite("generic_textures", "hud_menu_4a", _x, _y+0.0125,0.015+ factor, 0.03, 0.1, 100, 1, 1, 190, 0)
+	if useBg then
+		DrawSprite("generic_textures", "hud_menu_4a", _x, _y+0.0125,0.015+ factor, 0.03, 0.1, 100, 1, 1, 190, 0)
+	end
 end
