@@ -17,8 +17,7 @@ Citizen.CreateThread(function()
     while true do
 		local players = GetPlayers()
 		
-		for _,v in pairs(players) do
-		
+		for _,v in pairs(players) do		
 			if enableids then
 				local ped = PlayerPedId()
 				x1, y1, z1 = table.unpack(GetEntityCoords(ped, true))
@@ -37,7 +36,6 @@ Citizen.CreateThread(function()
         Wait(5) 
         if enableids then
             local ped = PlayerPedId()
-
             local players = GetPlayers()
 
             for _,v in pairs(players) do
