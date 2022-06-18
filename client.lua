@@ -1,7 +1,7 @@
 local enableids = true
 local playerDistances = {}
 
-
+-- Toggle player ids on/off
 Citizen.CreateThread(function()
     while true do 
         if IsControlJustPressed(0, Config.ToggleKey) then
@@ -12,6 +12,7 @@ Citizen.CreateThread(function()
     end
 end)
 
+-- Get players distances.
 Citizen.CreateThread(function()
     while true do
 		local players = GetPlayers()
@@ -30,7 +31,7 @@ Citizen.CreateThread(function()
     end
 end)
 
--- ID's thread.
+-- Draw ID's
 Citizen.CreateThread(function()
     while true do 
         Wait(5) 
@@ -51,6 +52,7 @@ Citizen.CreateThread(function()
     end
 end)
 
+-- The below functions are required for the script to function properly. Removing them will result in the script breaking.
 function GetPlayers()
     local players = {}
 	
